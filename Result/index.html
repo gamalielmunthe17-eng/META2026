@@ -5,11 +5,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <title>Practice META 2026 - Live Practice Results</title>
+  <title>Practice META 2026 - Live Results</title>
 
   <style>
+
     /* ========================================
-       BASE
+       RESET
     ======================================== */
 
     * {
@@ -20,18 +21,12 @@
     body {
       margin: 0;
       padding: 0;
+      width: 100%;
+      min-height: 100%;
     }
 
     body {
       font-family: Arial, Helvetica, sans-serif;
-
-      background:
-        url("assets/images/IMG_2811.PNG")
-        no-repeat
-        center top
-        fixed;
-
-      background-size: 100% auto;
 
       min-height: 100vh;
 
@@ -42,6 +37,42 @@
       text-align: center;
 
       overflow-x: hidden;
+
+      background: #eeeeee;
+
+      position: relative;
+    }
+
+
+    /* ========================================
+       BACKGROUND
+
+       Dibuat layer terpisah supaya tidak
+       stretch di iPhone / mobile Safari
+    ======================================== */
+
+    body::before {
+      content: "";
+
+      position: fixed;
+
+      top: 0;
+      left: 0;
+
+      width: 100%;
+      height: 100vh;
+      height: 100dvh;
+
+      background:
+        url("assets/images/IMG_2811.PNG")
+        no-repeat
+        center top;
+
+      background-size: cover;
+
+      z-index: -1;
+
+      pointer-events: none;
     }
 
 
@@ -113,7 +144,7 @@
 
 
     /* ========================================
-       SEARCH AND PAGINATION
+       SEARCH
     ======================================== */
 
     .list-tools {
@@ -185,6 +216,11 @@
       outline-offset: 2px;
     }
 
+
+    /* ========================================
+       PAGINATION
+    ======================================== */
+
     .pagination {
       display: flex;
 
@@ -250,9 +286,9 @@
 
 
     /* ========================================
-       GRID DESKTOP
+       DESKTOP GRID
 
-       Driver | Car | Lap 1 | Lap 2 | Lap 3
+       DRIVER | CAR | HOT LAP
     ======================================== */
 
     .leaderboard-header,
@@ -260,19 +296,15 @@
       display: grid;
 
       grid-template-columns:
-        1.4fr
-        1.2fr
-        0.7fr
-        0.7fr
-        0.7fr;
+        1.5fr
+        1.3fr
+        1fr;
 
       gap: 12px;
 
       align-items: center;
 
       padding: 18px 24px;
-
-      min-width: 700px;
     }
 
 
@@ -312,7 +344,8 @@
 
       border-bottom: 1px solid #dddddd;
 
-      transition: 0.2s ease;
+      transition:
+        background 0.2s ease;
     }
 
     .driver-row:nth-child(even) {
@@ -363,29 +396,17 @@
 
 
     /* ========================================
-       LAP GROUP
+       HOT LAP
     ======================================== */
 
-    .lap-group {
-      display: contents;
-    }
-
-
-    /* ========================================
-       LAP
-
-       Semua lap dibuat SAMA.
-       Tidak ada fastest lap highlight.
-    ======================================== */
-
-    .lap {
+    .hot-lap {
       color: #d71920;
 
       font-family: "Courier New", monospace;
 
-      font-size: 0.95rem;
+      font-size: 1.05rem;
 
-      font-weight: 700;
+      font-weight: 900;
 
       text-align: center;
 
@@ -420,7 +441,7 @@
 
 
     /* ========================================
-       META STRIPE BAWAH
+       META STRIPE
     ======================================== */
 
     .container::after {
@@ -446,14 +467,8 @@
     }
 
 
-    /* =====================================================
-       RESPONSIVE
-    ===================================================== */
-
-
     /* ========================================
-       TABLET / LANDSCAPE
-       769px - 1024px
+       TABLET
     ======================================== */
 
     @media (min-width: 769px) and (max-width: 1024px) {
@@ -469,17 +484,13 @@
       .leaderboard-header,
       .driver-row {
         grid-template-columns:
-          1.3fr
-          1fr
-          0.65fr
-          0.65fr
-          0.65fr;
+          1.4fr
+          1.2fr
+          0.9fr;
 
         gap: 8px;
 
         padding: 15px 16px;
-
-        min-width: 650px;
       }
 
       .driver-name {
@@ -490,38 +501,52 @@
         font-size: 0.82rem;
       }
 
-      .lap {
-        font-size: 0.85rem;
+      .hot-lap {
+        font-size: 0.95rem;
       }
+
     }
 
 
     /* ========================================
-       MOBILE / SMALL TABLET
-       ≤ 768px
-
-       DRIVER
-       CAR
-       LAP 1 | LAP 2 | LAP 3
+       MOBILE
     ======================================== */
 
     @media (max-width: 768px) {
 
       body {
-        background-size: 100% 100%;
+        padding:
+          20px
+          0
+          40px;
+      }
+
+
+      /*
+        Background tetap mengikuti viewport,
+        BUKAN panjang seluruh leaderboard.
+      */
+
+      body::before {
+        width: 100vw;
+
+        height: 100vh;
+        height: 100dvh;
 
         background-position: center top;
 
-        background-attachment: scroll;
+        background-size: cover;
       }
 
 
       .container {
-        width: 92%;
+        width: 82%;
 
-        max-width: 92%;
+        max-width: 580px;
 
         margin: 120px auto 0;
+
+        border-radius: 14px;
       }
 
 
@@ -548,7 +573,14 @@
       }
 
 
-      /* HIDE DESKTOP TABLE HEADER */
+      /* SEARCH */
+
+      .list-tools {
+        padding: 12px 14px;
+      }
+
+
+      /* HIDE DESKTOP HEADER */
 
       .leaderboard-header {
         display: none;
@@ -574,15 +606,16 @@
 
         min-width: 0;
 
-        padding: 14px 14px 16px;
+        padding:
+          14px
+          14px
+          16px;
 
         text-align: left;
       }
 
 
-      /* ========================================
-         DRIVER
-      ======================================== */
+      /* DRIVER */
 
       .driver-name {
         font-size: 0.9rem;
@@ -607,14 +640,12 @@
       }
 
 
-      /* ========================================
-         CAR
-      ======================================== */
+      /* CAR */
 
       .car {
         width: 100%;
 
-        padding: 8px 10px;
+        padding: 9px 10px;
 
         background: #e5e5e5;
 
@@ -644,98 +675,96 @@
       }
 
 
-      /* ========================================
-         LAP GROUP
+      /* HOT LAP */
 
-         Tetap horizontal:
-         LAP 1 | LAP 2 | LAP 3
-      ======================================== */
-
-      .lap-group {
-        display: grid;
-
-        grid-template-columns:
-          repeat(3, minmax(0, 1fr));
-
-        gap: 6px;
-
+      .hot-lap {
         width: 100%;
-      }
 
-      .lap {
-        min-width: 0;
-
-        padding: 9px 3px;
+        padding:
+          13px
+          12px;
 
         background: #252525;
 
         color: #ffffff;
 
-        border-radius: 6px;
+        border-radius: 7px;
 
         text-align: center;
 
-        font-size: 0.78rem;
+        font-size: 1rem;
 
-        font-weight: 700;
+        font-weight: 900;
       }
 
-      .lap::before {
+      .hot-lap::before {
+        content: "HOT LAP";
+
         display: block;
 
-        margin-bottom: 3px;
+        margin-bottom: 5px;
 
         color: #aaaaaa;
 
         font-family: Arial, Helvetica, sans-serif;
 
-        font-size: 0.55rem;
+        font-size: 0.58rem;
 
-        font-weight: 700;
+        font-weight: 800;
 
-        letter-spacing: 0.5px;
+        letter-spacing: 1px;
       }
 
-      .lap1::before {
-        content: "LAP 1";
+
+      /* PAGINATION */
+
+      .pagination {
+        padding:
+          11px
+          10px;
+
+        gap: 8px;
+
+        font-size: 0.7rem;
       }
 
-      .lap2::before {
-        content: "LAP 2";
+      .pagination button {
+        min-height: 34px;
+
+        padding:
+          6px
+          9px;
       }
 
-      .lap3::before {
-        content: "LAP 3";
-      }
     }
 
 
     /* ========================================
        VERY SMALL MOBILE
-       ≤ 360px
     ======================================== */
 
     @media (max-width: 360px) {
 
       .container {
-        width: 94%;
+        width: 88%;
 
-        max-width: 94%;
-      }
-
-      .lap-group {
-        gap: 4px;
-      }
-
-      .lap {
-        font-size: 0.7rem;
-
-        padding: 8px 2px;
+        max-width: 88%;
       }
 
       .header h1 {
-        font-size: 1.1rem;
+        font-size: 1.05rem;
       }
+
+      .header p {
+        font-size: 0.55rem;
+
+        letter-spacing: 0.6px;
+      }
+
+      .hot-lap {
+        font-size: 0.92rem;
+      }
+
     }
 
   </style>
@@ -745,14 +774,10 @@
 <body>
 
 
-  <!-- ========================================
-       CARD
-  ======================================== -->
-
   <div
     class="container"
     role="region"
-    aria-label="META 2026 Live Practice Results"
+    aria-label="META 2026 Hot Lap Results"
   >
 
 
@@ -765,30 +790,33 @@
       <p>
         27 SEPTEMBER 2026
         &nbsp;•&nbsp;
-        LIVE PRACTICE RESULTS
+        LIVE HOT LAP RESULTS
       </p>
 
     </div>
 
 
+    <!-- SEARCH -->
+
     <div class="list-tools">
 
       <label class="search-control">
+
         Search drivers
+
         <input
           id="driver-search"
           type="search"
           placeholder="Driver or car"
           autocomplete="off"
         />
+
       </label>
 
     </div>
 
 
-    <!-- ========================================
-         LEADERBOARD
-    ======================================== -->
+    <!-- LEADERBOARD -->
 
     <div class="leaderboard">
 
@@ -804,11 +832,7 @@
 
         <div>Car</div>
 
-        <div>Lap 1</div>
-
-        <div>Lap 2</div>
-
-        <div>Lap 3</div>
+        <div>Hot Lap</div>
 
       </div>
 
@@ -827,38 +851,55 @@
     </div>
 
 
-    <nav class="pagination" aria-label="Driver results pages">
-      <button id="previous-page" type="button" disabled>Previous</button>
-      <span id="page-status" aria-live="polite">Page 1 of 1</span>
-      <button id="next-page" type="button" disabled>Next</button>
+    <!-- PAGINATION -->
+
+    <nav
+      class="pagination"
+      aria-label="Driver results pages"
+    >
+
+      <button
+        id="previous-page"
+        type="button"
+        disabled
+      >
+        Previous
+      </button>
+
+      <span
+        id="page-status"
+        aria-live="polite"
+      >
+        Page 1 of 1
+      </span>
+
+      <button
+        id="next-page"
+        type="button"
+        disabled
+      >
+        Next
+      </button>
+
     </nav>
+
 
   </div>
 
 
-  <!-- ========================================
-       NO JAVASCRIPT
-  ======================================== -->
-
   <noscript>
 
     <p style="margin-top:16px">
-
       Please enable JavaScript to load leaderboard data.
-
     </p>
 
   </noscript>
 
 
-  <!-- ========================================
-       JAVASCRIPT
-  ======================================== -->
-
   <script>
 
     /* ========================================
-       SHEETBEST BARU
+       SHEETBEST
     ======================================== */
 
     const SHEET_URL =
@@ -866,10 +907,7 @@
 
 
     /* ========================================
-       HEADER ALIASES
-
-       Jadi nama kolom Google Sheet
-       masih agak fleksibel.
+       COLUMN ALIASES
     ======================================== */
 
     const KEY_ALIASES = {
@@ -889,31 +927,16 @@
         "Mobil"
       ],
 
-      LAP1: [
-        "LAP1",
-        "Lap1",
-        "Lap 1",
-        "lap1",
-        "lap 1",
-        "LAP 1"
-      ],
-
-      LAP2: [
-        "LAP2",
-        "Lap2",
-        "Lap 2",
-        "lap2",
-        "lap 2",
-        "LAP 2"
-      ],
-
-      LAP3: [
-        "LAP3",
-        "Lap3",
-        "Lap 3",
-        "lap3",
-        "lap 3",
-        "LAP 3"
+      HOTLAP: [
+        "HOT LAP",
+        "Hot Lap",
+        "hot lap",
+        "HOTLAP",
+        "HotLap",
+        "hotlap",
+        "TIME",
+        "Time",
+        "time"
       ]
 
     };
@@ -946,7 +969,7 @@
 
 
     /* ========================================
-       NORMALIZE DATA
+       NORMALIZE
     ======================================== */
 
     function normalize(rows) {
@@ -965,22 +988,10 @@
             KEY_ALIASES.CAR
           ),
 
-        LAP1:
+        HOTLAP:
           pick(
             row,
-            KEY_ALIASES.LAP1
-          ),
-
-        LAP2:
-          pick(
-            row,
-            KEY_ALIASES.LAP2
-          ),
-
-        LAP3:
-          pick(
-            row,
-            KEY_ALIASES.LAP3
+            KEY_ALIASES.HOTLAP
           )
 
       }));
@@ -989,13 +1000,7 @@
 
 
     /* ========================================
-       RENDER DATA
-
-       TIDAK ADA SORTING.
-       TIDAK ADA FASTEST LAP.
-       TIDAK ADA HIGHLIGHT.
-
-       Urutan = Google Sheet.
+       STATE
     ======================================== */
 
     const PAGE_SIZE = 5;
@@ -1005,7 +1010,30 @@
     let currentPage = 1;
 
 
-    function render(rows, emptyMessage = "No race data available") {
+    /* ========================================
+       HTML ESCAPE
+    ======================================== */
+
+    function escapeHTML(value) {
+
+      return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+
+    }
+
+
+    /* ========================================
+       RENDER
+    ======================================== */
+
+    function render(
+      rows,
+      emptyMessage = "No race data available"
+    ) {
 
       const wrap =
         document.getElementById(
@@ -1017,7 +1045,7 @@
 
         wrap.innerHTML = `
           <div class="error">
-            ${emptyMessage}
+            ${escapeHTML(emptyMessage)}
           </div>
         `;
 
@@ -1033,33 +1061,17 @@
 
 
             <div class="driver-name">
-              ${row.DRIVER ?? ""}
+              ${escapeHTML(row.DRIVER)}
             </div>
 
 
             <div class="car">
-              ${row.CAR ?? ""}
+              ${escapeHTML(row.CAR)}
             </div>
 
 
-            <div class="lap-group">
-
-
-              <div class="lap lap1">
-                ${row.LAP1 ?? ""}
-              </div>
-
-
-              <div class="lap lap2">
-                ${row.LAP2 ?? ""}
-              </div>
-
-
-              <div class="lap lap3">
-                ${row.LAP3 ?? ""}
-              </div>
-
-
+            <div class="hot-lap">
+              ${escapeHTML(row.HOTLAP) || "-"}
             </div>
 
 
@@ -1070,47 +1082,83 @@
     }
 
 
+    /* ========================================
+       UPDATE RESULTS
+    ======================================== */
+
     function updateResults() {
 
       const query =
-        document.getElementById("driver-search")
+        document
+          .getElementById("driver-search")
           .value
           .trim()
           .toLocaleLowerCase();
 
+
       const filteredRows =
         allRows.filter(row =>
+
           `${row.DRIVER} ${row.CAR}`
             .toLocaleLowerCase()
             .includes(query)
+
         );
 
+
       const pageCount =
-        Math.max(1, Math.ceil(filteredRows.length / PAGE_SIZE));
+        Math.max(
+          1,
+          Math.ceil(
+            filteredRows.length /
+            PAGE_SIZE
+          )
+        );
 
-      currentPage = Math.min(currentPage, pageCount);
 
-      const start = (currentPage - 1) * PAGE_SIZE;
+      currentPage =
+        Math.min(
+          currentPage,
+          pageCount
+        );
+
+
+      const start =
+        (currentPage - 1) *
+        PAGE_SIZE;
+
 
       render(
-        filteredRows.slice(start, start + PAGE_SIZE),
+        filteredRows.slice(
+          start,
+          start + PAGE_SIZE
+        ),
         "No matching drivers"
       );
 
-      document.getElementById("page-status").textContent =
-        `Page ${currentPage} of ${pageCount}`;
 
-      document.getElementById("previous-page").disabled =
-        currentPage === 1;
+      document
+        .getElementById("page-status")
+        .textContent =
+          `Page ${currentPage} of ${pageCount}`;
 
-      document.getElementById("next-page").disabled =
-        currentPage === pageCount;
+
+      document
+        .getElementById("previous-page")
+        .disabled =
+          currentPage === 1;
+
+
+      document
+        .getElementById("next-page")
+        .disabled =
+          currentPage >= pageCount;
 
     }
 
 
     /* ========================================
-       LOAD DATA
+       LOAD SHEETBEST
     ======================================== */
 
     async function load() {
@@ -1153,28 +1201,29 @@
           );
 
 
-        /* ========================================
-           FILTER
+        /*
+          Driver wajib ada.
 
-           Driver wajib terisi.
-
-           Lap boleh kosong karena saat live
-           peserta mungkin belum menyelesaikan
-           semua lap.
-        ======================================== */
+          Hot Lap boleh kosong selama
+          peserta belum mencatat waktu.
+        */
 
         const valid =
           normalized.filter(row =>
 
-            (row.DRIVER ?? "")
-              .trim() !== ""
+            row.DRIVER.trim() !== ""
 
           );
 
 
         allRows = valid;
 
-        currentPage = 1;
+
+        /*
+          Tidak reset ke page 1 setiap
+          auto refresh supaya user tidak
+          dilempar kembali ke awal.
+        */
 
         updateResults();
 
@@ -1189,16 +1238,11 @@
 
 
         /*
-          Kalau sebelumnya data sudah tampil,
-          jangan hilangkan tabel hanya karena
-          satu request refresh gagal.
+          Kalau sebelumnya data sudah ada,
+          pertahankan data tersebut.
         */
 
-        if (
-          !wrap.querySelector(
-            ".driver-row"
-          )
-        ) {
+        if (allRows.length === 0) {
 
           wrap.innerHTML = `
             <div class="error">
@@ -1221,39 +1265,65 @@
       "DOMContentLoaded",
       () => {
 
+
+        /* SEARCH */
+
         document
           .getElementById("driver-search")
-          .addEventListener("input", () => {
-            currentPage = 1;
-            updateResults();
-          });
+          .addEventListener(
+            "input",
+            () => {
+
+              currentPage = 1;
+
+              updateResults();
+
+            }
+          );
+
+
+        /* PREVIOUS */
 
         document
           .getElementById("previous-page")
-          .addEventListener("click", () => {
-            if (currentPage > 1) {
-              currentPage -= 1;
-              updateResults();
+          .addEventListener(
+            "click",
+            () => {
+
+              if (currentPage > 1) {
+
+                currentPage -= 1;
+
+                updateResults();
+
+              }
+
             }
-          });
+          );
+
+
+        /* NEXT */
 
         document
           .getElementById("next-page")
-          .addEventListener("click", () => {
-            currentPage += 1;
-            updateResults();
-          });
+          .addEventListener(
+            "click",
+            () => {
 
-        /* Load langsung saat website dibuka */
+              currentPage += 1;
+
+              updateResults();
+
+            }
+          );
+
+
+        /* INITIAL LOAD */
 
         load();
 
 
-        /* ========================================
-           AUTO REFRESH
-
-           30000 ms = 30 detik
-        ======================================== */
+        /* AUTO REFRESH 30 DETIK */
 
         setInterval(
           load,
