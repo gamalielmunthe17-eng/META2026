@@ -113,6 +113,130 @@
 
 
     /* ========================================
+       SEARCH AND PAGINATION
+    ======================================== */
+
+    .list-tools {
+      display: flex;
+
+      align-items: end;
+
+      justify-content: space-between;
+
+      gap: 14px;
+
+      padding: 14px 18px;
+
+      background: #ffffff;
+
+      color: #181818;
+
+      border-bottom: 1px solid #dddddd;
+    }
+
+    .search-control {
+      display: grid;
+
+      flex: 1 1 280px;
+
+      gap: 6px;
+
+      text-align: left;
+
+      color: #666666;
+
+      font-size: 0.7rem;
+
+      font-weight: 800;
+
+      letter-spacing: 1px;
+
+      text-transform: uppercase;
+    }
+
+    .search-control input {
+      width: 100%;
+
+      min-height: 40px;
+
+      padding: 8px 11px;
+
+      border: 1px solid #bdbdbd;
+
+      border-radius: 5px;
+
+      background: #ffffff;
+
+      color: #181818;
+
+      font: inherit;
+
+      font-size: 0.9rem;
+
+      letter-spacing: 0;
+
+      text-transform: none;
+    }
+
+    .search-control input:focus-visible,
+    .pagination button:focus-visible {
+      outline: 2px solid #d71920;
+
+      outline-offset: 2px;
+    }
+
+    .pagination {
+      display: flex;
+
+      align-items: center;
+
+      justify-content: center;
+
+      gap: 10px;
+
+      padding: 12px 16px;
+
+      background: #ffffff;
+
+      color: #555555;
+
+      font-size: 0.8rem;
+
+      font-weight: 700;
+    }
+
+    .pagination button {
+      min-height: 36px;
+
+      padding: 7px 12px;
+
+      border: 1px solid #bdbdbd;
+
+      border-radius: 5px;
+
+      background: #ffffff;
+
+      color: #181818;
+
+      font: inherit;
+
+      cursor: pointer;
+    }
+
+    .pagination button:hover:not(:disabled) {
+      border-color: #d71920;
+
+      color: #d71920;
+    }
+
+    .pagination button:disabled {
+      color: #999999;
+
+      cursor: default;
+    }
+
+
+    /* ========================================
        LEADERBOARD
     ======================================== */
 
@@ -384,7 +508,7 @@
     @media (max-width: 768px) {
 
       body {
-        background-size: cover;
+        background-size: 100% 100%;
 
         background-position: center top;
 
@@ -647,6 +771,21 @@
     </div>
 
 
+    <div class="list-tools">
+
+      <label class="search-control">
+        Search drivers
+        <input
+          id="driver-search"
+          type="search"
+          placeholder="Driver or car"
+          autocomplete="off"
+        />
+      </label>
+
+    </div>
+
+
     <!-- ========================================
          LEADERBOARD
     ======================================== -->
@@ -686,6 +825,13 @@
 
 
     </div>
+
+
+    <nav class="pagination" aria-label="Driver results pages">
+      <button id="previous-page" type="button" disabled>Previous</button>
+      <span id="page-status" aria-live="polite">Page 1 of 1</span>
+      <button id="next-page" type="button" disabled>Next</button>
+    </nav>
 
   </div>
 
@@ -852,7 +998,14 @@
        Urutan = Google Sheet.
     ======================================== */
 
-    function render(rows) {
+    const PAGE_SIZE = 10;
+
+    let allRows = [];
+
+    let currentPage = 1;
+
+
+    function render(rows, emptyMessage = "No race data available") {
 
       const wrap =
         document.getElementById(
@@ -864,7 +1017,7 @@
 
         wrap.innerHTML = `
           <div class="error">
-            No race data available
+            ${emptyMessage}
           </div>
         `;
 
@@ -913,6 +1066,45 @@
           </div>
 
         `).join("");
+
+    }
+
+
+    function updateResults() {
+
+      const query =
+        document.getElementById("driver-search")
+          .value
+          .trim()
+          .toLocaleLowerCase();
+
+      const filteredRows =
+        allRows.filter(row =>
+          `${row.DRIVER} ${row.CAR}`
+            .toLocaleLowerCase()
+            .includes(query)
+        );
+
+      const pageCount =
+        Math.max(1, Math.ceil(filteredRows.length / PAGE_SIZE));
+
+      currentPage = Math.min(currentPage, pageCount);
+
+      const start = (currentPage - 1) * PAGE_SIZE;
+
+      render(
+        filteredRows.slice(start, start + PAGE_SIZE),
+        "No matching drivers"
+      );
+
+      document.getElementById("page-status").textContent =
+        `Page ${currentPage} of ${pageCount}`;
+
+      document.getElementById("previous-page").disabled =
+        currentPage === 1;
+
+      document.getElementById("next-page").disabled =
+        currentPage === pageCount;
 
     }
 
@@ -980,7 +1172,11 @@
           );
 
 
-        render(valid);
+        allRows = valid;
+
+        currentPage = 1;
+
+        updateResults();
 
       }
 
@@ -1024,6 +1220,29 @@
     document.addEventListener(
       "DOMContentLoaded",
       () => {
+
+        document
+          .getElementById("driver-search")
+          .addEventListener("input", () => {
+            currentPage = 1;
+            updateResults();
+          });
+
+        document
+          .getElementById("previous-page")
+          .addEventListener("click", () => {
+            if (currentPage > 1) {
+              currentPage -= 1;
+              updateResults();
+            }
+          });
+
+        document
+          .getElementById("next-page")
+          .addEventListener("click", () => {
+            currentPage += 1;
+            updateResults();
+          });
 
         /* Load langsung saat website dibuka */
 
