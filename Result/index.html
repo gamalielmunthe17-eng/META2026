@@ -1,0 +1,1050 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Practice META 2026 - Live Practice Results</title>
+
+  <style>
+    /* ========================================
+       BASE
+    ======================================== */
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+
+      background:
+        url("assets/images/IMG_2811.PNG")
+        no-repeat
+        center top
+        fixed;
+
+      background-size: 100% auto;
+
+      min-height: 100vh;
+
+      padding: 20px;
+
+      color: #fff;
+
+      text-align: center;
+
+      overflow-x: hidden;
+    }
+
+
+    /* ========================================
+       CONTAINER
+    ======================================== */
+
+    .container {
+      max-width: 900px;
+
+      margin: 350px auto 0;
+
+      border-radius: 14px;
+
+      overflow: hidden;
+
+      background: rgba(245, 245, 245, 0.96);
+
+      border: 1px solid rgba(0, 0, 0, 0.12);
+
+      box-shadow:
+        0 12px 30px rgba(0, 0, 0, 0.25);
+
+      position: relative;
+    }
+
+
+    /* ========================================
+       HEADER
+    ======================================== */
+
+    .header {
+      background: #171717;
+
+      text-align: center;
+
+      padding: 16px 15px 14px;
+
+      border-left: 7px solid #d71920;
+    }
+
+    .header h1 {
+      margin: 0 0 5px 0;
+
+      color: #ffffff;
+
+      font-size: 2rem;
+
+      font-weight: 900;
+
+      letter-spacing: 1px;
+
+      text-transform: uppercase;
+    }
+
+    .header p {
+      margin: 0;
+
+      color: #cfcfcf;
+
+      font-size: 0.78rem;
+
+      font-weight: 700;
+
+      letter-spacing: 2px;
+
+      text-transform: uppercase;
+    }
+
+
+    /* ========================================
+       LEADERBOARD
+    ======================================== */
+
+    .leaderboard {
+      width: 100%;
+
+      overflow-x: auto;
+
+      -webkit-overflow-scrolling: touch;
+    }
+
+
+    /* ========================================
+       GRID DESKTOP
+
+       Driver | Car | Lap 1 | Lap 2 | Lap 3
+    ======================================== */
+
+    .leaderboard-header,
+    .driver-row {
+      display: grid;
+
+      grid-template-columns:
+        1.4fr
+        1.2fr
+        0.7fr
+        0.7fr
+        0.7fr;
+
+      gap: 12px;
+
+      align-items: center;
+
+      padding: 18px 24px;
+
+      min-width: 700px;
+    }
+
+
+    /* ========================================
+       TABLE HEADER
+    ======================================== */
+
+    .leaderboard-header {
+      background: #d71920;
+
+      color: #ffffff;
+
+      font-size: 0.78rem;
+
+      font-weight: 800;
+
+      letter-spacing: 1px;
+
+      text-transform: uppercase;
+
+      padding-top: 15px;
+
+      padding-bottom: 15px;
+
+      border-bottom: 3px solid #ffd426;
+    }
+
+
+    /* ========================================
+       DRIVER ROW
+    ======================================== */
+
+    .driver-row {
+      background: rgba(255, 255, 255, 0.96);
+
+      color: #181818;
+
+      border-bottom: 1px solid #dddddd;
+
+      transition: 0.2s ease;
+    }
+
+    .driver-row:nth-child(even) {
+      background: #eeeeee;
+    }
+
+    .driver-row:hover {
+      background: #e5e5e5;
+    }
+
+
+    /* ========================================
+       DRIVER
+    ======================================== */
+
+    .driver-name {
+      color: #181818;
+
+      font-size: 1rem;
+
+      font-weight: 900;
+
+      text-transform: uppercase;
+
+      text-align: left;
+    }
+
+
+    /* ========================================
+       CAR
+    ======================================== */
+
+    .car {
+      color: #555555;
+
+      font-size: 0.9rem;
+
+      font-weight: 700;
+
+      text-align: center;
+
+      white-space: nowrap;
+
+      overflow: hidden;
+
+      text-overflow: ellipsis;
+    }
+
+
+    /* ========================================
+       LAP GROUP
+    ======================================== */
+
+    .lap-group {
+      display: contents;
+    }
+
+
+    /* ========================================
+       LAP
+
+       Semua lap dibuat SAMA.
+       Tidak ada fastest lap highlight.
+    ======================================== */
+
+    .lap {
+      color: #d71920;
+
+      font-family: "Courier New", monospace;
+
+      font-size: 0.95rem;
+
+      font-weight: 700;
+
+      text-align: center;
+
+      padding: 8px 4px;
+
+      white-space: nowrap;
+    }
+
+
+    /* ========================================
+       LOADING / ERROR
+    ======================================== */
+
+    .loading,
+    .error {
+      background: rgba(255, 255, 255, 0.96);
+
+      color: #555555;
+
+      text-align: center;
+
+      padding: 38px 20px;
+
+      font-size: 1.05rem;
+
+      font-weight: 700;
+    }
+
+    .error {
+      color: #d71920;
+    }
+
+
+    /* ========================================
+       META STRIPE BAWAH
+    ======================================== */
+
+    .container::after {
+      content: "";
+
+      display: block;
+
+      height: 9px;
+
+      background:
+        linear-gradient(
+          to bottom,
+
+          #171717 0%,
+          #171717 33%,
+
+          #d71920 33%,
+          #d71920 66%,
+
+          #ffd426 66%,
+          #ffd426 100%
+        );
+    }
+
+
+    /* =====================================================
+       RESPONSIVE
+    ===================================================== */
+
+
+    /* ========================================
+       TABLET / LANDSCAPE
+       769px - 1024px
+    ======================================== */
+
+    @media (min-width: 769px) and (max-width: 1024px) {
+
+      .container {
+        width: 88%;
+
+        max-width: 820px;
+
+        margin: 220px auto 0;
+      }
+
+      .leaderboard-header,
+      .driver-row {
+        grid-template-columns:
+          1.3fr
+          1fr
+          0.65fr
+          0.65fr
+          0.65fr;
+
+        gap: 8px;
+
+        padding: 15px 16px;
+
+        min-width: 650px;
+      }
+
+      .driver-name {
+        font-size: 0.9rem;
+      }
+
+      .car {
+        font-size: 0.82rem;
+      }
+
+      .lap {
+        font-size: 0.85rem;
+      }
+    }
+
+
+    /* ========================================
+       MOBILE / SMALL TABLET
+       ≤ 768px
+
+       DRIVER
+       CAR
+       LAP 1 | LAP 2 | LAP 3
+    ======================================== */
+
+    @media (max-width: 768px) {
+
+      body {
+        background-size: 100% 100%;
+
+        background-position: center top;
+      }
+
+
+      .container {
+        width: 92%;
+
+        max-width: 92%;
+
+        margin: 120px auto 0;
+      }
+
+
+      /* HEADER */
+
+      .header {
+        padding: 18px 8px;
+      }
+
+      .header h1 {
+        font-size: 1.25rem;
+
+        letter-spacing: 0;
+
+        white-space: nowrap;
+      }
+
+      .header p {
+        font-size: 0.62rem;
+
+        letter-spacing: 1px;
+
+        white-space: nowrap;
+      }
+
+
+      /* HIDE DESKTOP TABLE HEADER */
+
+      .leaderboard-header {
+        display: none;
+      }
+
+      .leaderboard {
+        overflow: hidden;
+      }
+
+
+      /* ========================================
+         DRIVER CARD
+      ======================================== */
+
+      .driver-row {
+        display: grid;
+
+        grid-template-columns: 1fr;
+
+        gap: 9px;
+
+        width: 100%;
+
+        min-width: 0;
+
+        padding: 14px 14px 16px;
+
+        text-align: left;
+      }
+
+
+      /* ========================================
+         DRIVER
+      ======================================== */
+
+      .driver-name {
+        font-size: 0.9rem;
+
+        text-align: left;
+      }
+
+      .driver-name::before {
+        content: "DRIVER";
+
+        display: block;
+
+        margin-bottom: 3px;
+
+        color: #777777;
+
+        font-size: 0.62rem;
+
+        font-weight: 700;
+
+        letter-spacing: 1px;
+      }
+
+
+      /* ========================================
+         CAR
+      ======================================== */
+
+      .car {
+        width: 100%;
+
+        padding: 8px 10px;
+
+        background: #e5e5e5;
+
+        color: #333333;
+
+        border-radius: 6px;
+
+        text-align: left;
+
+        font-size: 0.82rem;
+      }
+
+      .car::before {
+        content: "CAR";
+
+        display: block;
+
+        margin-bottom: 3px;
+
+        color: #777777;
+
+        font-size: 0.6rem;
+
+        font-weight: 700;
+
+        letter-spacing: 1px;
+      }
+
+
+      /* ========================================
+         LAP GROUP
+
+         Tetap horizontal:
+         LAP 1 | LAP 2 | LAP 3
+      ======================================== */
+
+      .lap-group {
+        display: grid;
+
+        grid-template-columns:
+          repeat(3, minmax(0, 1fr));
+
+        gap: 6px;
+
+        width: 100%;
+      }
+
+      .lap {
+        min-width: 0;
+
+        padding: 9px 3px;
+
+        background: #252525;
+
+        color: #ffffff;
+
+        border-radius: 6px;
+
+        text-align: center;
+
+        font-size: 0.78rem;
+
+        font-weight: 700;
+      }
+
+      .lap::before {
+        display: block;
+
+        margin-bottom: 3px;
+
+        color: #aaaaaa;
+
+        font-family: Arial, Helvetica, sans-serif;
+
+        font-size: 0.55rem;
+
+        font-weight: 700;
+
+        letter-spacing: 0.5px;
+      }
+
+      .lap1::before {
+        content: "LAP 1";
+      }
+
+      .lap2::before {
+        content: "LAP 2";
+      }
+
+      .lap3::before {
+        content: "LAP 3";
+      }
+    }
+
+
+    /* ========================================
+       VERY SMALL MOBILE
+       ≤ 360px
+    ======================================== */
+
+    @media (max-width: 360px) {
+
+      .container {
+        width: 94%;
+
+        max-width: 94%;
+      }
+
+      .lap-group {
+        gap: 4px;
+      }
+
+      .lap {
+        font-size: 0.7rem;
+
+        padding: 8px 2px;
+      }
+
+      .header h1 {
+        font-size: 1.1rem;
+      }
+    }
+
+  </style>
+</head>
+
+
+<body>
+
+
+  <!-- ========================================
+       CARD
+  ======================================== -->
+
+  <div
+    class="container"
+    role="region"
+    aria-label="META 2026 Live Practice Results"
+  >
+
+
+    <!-- HEADER -->
+
+    <div class="header">
+
+      <h1>Practice META 2026</h1>
+
+      <p>
+        27 SEPTEMBER 2026
+        &nbsp;•&nbsp;
+        LIVE PRACTICE RESULTS
+      </p>
+
+    </div>
+
+
+    <!-- ========================================
+         LEADERBOARD
+    ======================================== -->
+
+    <div class="leaderboard">
+
+
+      <!-- DESKTOP HEADER -->
+
+      <div
+        class="leaderboard-header"
+        aria-hidden="true"
+      >
+
+        <div>Driver</div>
+
+        <div>Car</div>
+
+        <div>Lap 1</div>
+
+        <div>Lap 2</div>
+
+        <div>Lap 3</div>
+
+      </div>
+
+
+      <!-- DATA -->
+
+      <div id="leaderboard-body">
+
+        <div class="loading">
+          🔄 Loading race data...
+        </div>
+
+      </div>
+
+
+    </div>
+
+  </div>
+
+
+  <!-- ========================================
+       NO JAVASCRIPT
+  ======================================== -->
+
+  <noscript>
+
+    <p style="margin-top:16px">
+
+      Please enable JavaScript to load leaderboard data.
+
+    </p>
+
+  </noscript>
+
+
+  <!-- ========================================
+       JAVASCRIPT
+  ======================================== -->
+
+  <script>
+
+    /* ========================================
+       SHEETBEST BARU
+    ======================================== */
+
+    const SHEET_URL =
+      "https://api.sheetbest.com/sheets/9121a906-0372-4545-bffa-4a22869f64d3";
+
+
+    /* ========================================
+       HEADER ALIASES
+
+       Jadi nama kolom Google Sheet
+       masih agak fleksibel.
+    ======================================== */
+
+    const KEY_ALIASES = {
+
+      DRIVER: [
+        "DRIVER",
+        "Driver",
+        "driver",
+        "Nama",
+        "Name"
+      ],
+
+      CAR: [
+        "CAR",
+        "Car",
+        "car",
+        "Mobil"
+      ],
+
+      LAP1: [
+        "LAP1",
+        "Lap1",
+        "Lap 1",
+        "lap1",
+        "lap 1",
+        "LAP 1"
+      ],
+
+      LAP2: [
+        "LAP2",
+        "Lap2",
+        "Lap 2",
+        "lap2",
+        "lap 2",
+        "LAP 2"
+      ],
+
+      LAP3: [
+        "LAP3",
+        "Lap3",
+        "Lap 3",
+        "lap3",
+        "lap 3",
+        "LAP 3"
+      ]
+
+    };
+
+
+    /* ========================================
+       PICK VALUE
+    ======================================== */
+
+    function pick(obj, keys) {
+
+      for (const key of keys) {
+
+        const value = obj?.[key];
+
+        if (
+          value != null &&
+          String(value).trim() !== ""
+        ) {
+
+          return String(value);
+
+        }
+
+      }
+
+      return "";
+
+    }
+
+
+    /* ========================================
+       NORMALIZE DATA
+    ======================================== */
+
+    function normalize(rows) {
+
+      return rows.map(row => ({
+
+        DRIVER:
+          pick(
+            row,
+            KEY_ALIASES.DRIVER
+          ),
+
+        CAR:
+          pick(
+            row,
+            KEY_ALIASES.CAR
+          ),
+
+        LAP1:
+          pick(
+            row,
+            KEY_ALIASES.LAP1
+          ),
+
+        LAP2:
+          pick(
+            row,
+            KEY_ALIASES.LAP2
+          ),
+
+        LAP3:
+          pick(
+            row,
+            KEY_ALIASES.LAP3
+          )
+
+      }));
+
+    }
+
+
+    /* ========================================
+       RENDER DATA
+
+       TIDAK ADA SORTING.
+       TIDAK ADA FASTEST LAP.
+       TIDAK ADA HIGHLIGHT.
+
+       Urutan = Google Sheet.
+    ======================================== */
+
+    function render(rows) {
+
+      const wrap =
+        document.getElementById(
+          "leaderboard-body"
+        );
+
+
+      if (!rows.length) {
+
+        wrap.innerHTML = `
+          <div class="error">
+            No race data available
+          </div>
+        `;
+
+        return;
+
+      }
+
+
+      wrap.innerHTML =
+        rows.map(row => `
+
+          <div class="driver-row">
+
+
+            <div class="driver-name">
+              ${row.DRIVER ?? ""}
+            </div>
+
+
+            <div class="car">
+              ${row.CAR ?? ""}
+            </div>
+
+
+            <div class="lap-group">
+
+
+              <div class="lap lap1">
+                ${row.LAP1 ?? ""}
+              </div>
+
+
+              <div class="lap lap2">
+                ${row.LAP2 ?? ""}
+              </div>
+
+
+              <div class="lap lap3">
+                ${row.LAP3 ?? ""}
+              </div>
+
+
+            </div>
+
+
+          </div>
+
+        `).join("");
+
+    }
+
+
+    /* ========================================
+       LOAD DATA
+    ======================================== */
+
+    async function load() {
+
+      const wrap =
+        document.getElementById(
+          "leaderboard-body"
+        );
+
+
+      try {
+
+        const response =
+          await fetch(
+            SHEET_URL,
+            {
+              cache: "no-store"
+            }
+          );
+
+
+        if (!response.ok) {
+
+          throw new Error(
+            `HTTP ${response.status}`
+          );
+
+        }
+
+
+        const raw =
+          await response.json();
+
+
+        const normalized =
+          normalize(
+            Array.isArray(raw)
+              ? raw
+              : []
+          );
+
+
+        /* ========================================
+           FILTER
+
+           Driver wajib terisi.
+
+           Lap boleh kosong karena saat live
+           peserta mungkin belum menyelesaikan
+           semua lap.
+        ======================================== */
+
+        const valid =
+          normalized.filter(row =>
+
+            (row.DRIVER ?? "")
+              .trim() !== ""
+
+          );
+
+
+        render(valid);
+
+      }
+
+      catch (error) {
+
+        console.error(
+          "Failed to load SheetBest:",
+          error
+        );
+
+
+        /*
+          Kalau sebelumnya data sudah tampil,
+          jangan hilangkan tabel hanya karena
+          satu request refresh gagal.
+        */
+
+        if (
+          !wrap.querySelector(
+            ".driver-row"
+          )
+        ) {
+
+          wrap.innerHTML = `
+            <div class="error">
+              Failed to load data
+            </div>
+          `;
+
+        }
+
+      }
+
+    }
+
+
+    /* ========================================
+       START
+    ======================================== */
+
+    document.addEventListener(
+      "DOMContentLoaded",
+      () => {
+
+        /* Load langsung saat website dibuka */
+
+        load();
+
+
+        /* ========================================
+           AUTO REFRESH
+
+           30000 ms = 30 detik
+        ======================================== */
+
+        setInterval(
+          load,
+          30000
+        );
+
+      }
+    );
+
+  </script>
+
+
+</body>
+
+</html>
